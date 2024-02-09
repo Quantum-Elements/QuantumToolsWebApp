@@ -1,0 +1,54 @@
+<div mat-dialog-title class="header">
+    <div class="header-text">
+        Add Bath Type
+    </div>
+    <img class="x-icon" (click)="dialogRef.close()" src="assets/x-icon-blue.svg" />
+</div>
+<div mat-dialog-content class="content">
+    <div class="setting-container">
+        <div class="setting-title">Bath Type</div>
+        <div class="setting">
+            <custom-select [options]="bathOptions" [(selectedValue)]="bath.type" (change)="setBathType($event)">
+            </custom-select>
+            <select [(ngModel)]="bath.type">
+                <option *ngFor="let option of bathOptions" [value]=option>{{option}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="setting-container">
+        <div class="setting-title">System Bath Coupling Operator</div>
+        <div class="setting">
+            <custom-select [options]="operatorOptions" [(selectedValue)]="bath.axis"></custom-select>
+        </div>
+    </div>
+    <div class="settings-container" *ngIf="bath.type == 'Ohmic'">
+        <div class="setting-container">
+            <div class="setting-title">Strength ( ηg<sup>2</sup> )</div>
+            <div class="setting">
+                <custom-number-input [step]="0.01" [exp]="-4" [(value)]="bath.strength"></custom-number-input>
+            </div>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">Temperature ( T )</div>
+            <div class="setting">
+                <custom-number-input [step]="1" [unit]="mK" [(value)]="bath.temperature"></custom-number-input>
+            </div>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">Cutoff Frequency ( W<sub>c</sub> )</div>
+            <div class="setting">
+                <custom-number-input [step]="0.01" [unit]="GHz" [(value)]="bath.frequency"></custom-number-input>
+            </div>
+        </div>
+    </div>
+    <div class="settings-container" *ngIf="bath.type == 'Lindblad'">
+        <div class="setting-container">
+            <div class="setting-title">Gamma (rate)</div>
+            <div class="setting">
+                <custom-number-input [step]="0.01" [unit]="GHz" [(value)]="bath.gamma"></custom-number-input>
+            </div>
+        </div>
+    </div>
+    <div class="btn" (click)="addBath()">Add Bath</div>
+
+</div>

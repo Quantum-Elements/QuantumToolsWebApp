@@ -1,0 +1,8 @@
+<div class="canvas" (click)="quditSelected.emit()">
+    <qudit id="{{ 'q' + (i + 1)}}" [class.active]="selectedQudit === q || selectedQuditToCouple.includes(q)"
+        cdkDragBoundary=".canvas" cdkDrag [qudit]="q" *ngFor="let q of configService.qudits; let i = index"
+        (cdkDragEnded)="updateQuditPosition(q, $event)" (click)="quditSelected.emit(q); $event.stopPropagation()">
+    </qudit>
+    <coupling *ngFor="let coupling of configService.couplings" [coupling]="coupling"
+        (click)="couplingSelected.emit(coupling); $event.stopPropagation()"></coupling>
+</div>

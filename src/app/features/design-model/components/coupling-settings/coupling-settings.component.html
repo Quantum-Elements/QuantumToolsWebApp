@@ -1,0 +1,22 @@
+<div class="tab-header">
+    {{'Coupling - [q' + (selectedCoupling.qudit1.id + 1) + ', q' + (selectedCoupling.qudit2.id + 1) + ']'}}
+    <button class="btn" (click)="deleteCoupling()">Delete Coupling</button>
+</div>
+<div class="tab-content">
+    <div class="setting-container">
+        <div class="setting-title">Frequency</div>
+        <custom-number-input [step]="0.01" unit="GHz" [(value)]="selectedCoupling.frequency"></custom-number-input>
+    </div>
+    <div class="setting-container">
+        <div class="setting-title">{{ 'q' + (selectedCoupling.qudit1.id + 1) + ' - Coupling Operator'}}</div>
+        <div class="setting">
+            <custom-select [options]="axisOptions" [(value)]="selectedCoupling.axis1"></custom-select>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">{{ 'q' + (selectedCoupling.qudit2.id + 1) + ' - Coupling Operator'}}</div>
+            <div class="setting">
+                <custom-select [options]="axisOptions" [(value)]="selectedCoupling.axis2"></custom-select>
+            </div>
+        </div>
+    </div>
+</div>

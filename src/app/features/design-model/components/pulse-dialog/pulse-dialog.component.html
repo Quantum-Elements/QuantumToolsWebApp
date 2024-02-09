@@ -1,0 +1,39 @@
+<div mat-dialog-title class="header">
+    <div class="header-text">
+        Add Gate Pulse
+    </div>
+    <img class="x-icon" (click)="dialogRef.close()" src="assets/x-icon-blue.svg" />
+</div>
+<div mat-dialog-content class="content">
+    <div class="setting-container">
+        <div class="setting-title">Drive Frequency</div>
+        <div class="setting">
+            <custom-number-input [step]="0.01" unit="GHz" [(value)]="pulse.drive_freq"></custom-number-input>
+        </div>
+    </div>
+    <div class="setting-container">
+        <div class="setting-title">Start</div>
+        <div class="setting">
+            <custom-number-input [step]="0.01" [(value)]="pulse.start"></custom-number-input>
+        </div>
+    </div>
+    <div class="setting-container">
+        <div class="setting-title">Duration</div>
+        <div class="setting">
+            <custom-number-input [step]="0.01" [(value)]="pulse.duration"></custom-number-input>
+        </div>
+    </div>
+    <div class="settings-container">
+        <div class="checkbox-container">
+            <mat-checkbox [(ngModel)]="xDriveSet">x-drive</mat-checkbox>
+            <mat-checkbox [(ngModel)]="yDriveSet">y-drive</mat-checkbox>
+        </div>
+        <div class="setting-container" *ngIf="xDriveSet">
+            <!-- <custom-select [options]="pulseOptions" [(value)]="pulse" -->
+            <div class="setting-title">Drive Frequency</div>
+            <div class="setting">
+                <custom-number-input [step]="0.01" [unit]="GHz" [(value)]="pulse.drive_freq"></custom-number-input>
+            </div>
+        </div>
+    </div>
+</div>
