@@ -15,14 +15,12 @@ export class BathDialogComponent {
   public bathOptions = Object.values(BathType);
   public operatorOptions;
   ngOnInit() {
-    console.log(this.bath)
     if (!this.bath) {
       this.bath = new LindbladBath()
     }
     this.updateOperatorOptions()
   }
   updateOperatorOptions() {
-    console.log(this.bath)
     if (this.bath.type == BathType.Lindblad) {
       this.operatorOptions = Object.values(LindbladOperator)
     } else {
@@ -30,7 +28,6 @@ export class BathDialogComponent {
     }
   }
   setBathType(event: any) {
-    console.log(event)
     let type = event.target.value
     if (type == BathType.Ohmic) {
       this.bath = new OhmicBath()

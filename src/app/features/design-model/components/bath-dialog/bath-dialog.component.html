@@ -8,9 +8,7 @@
     <div class="setting-container">
         <div class="setting-title">Bath Type</div>
         <div class="setting">
-            <custom-select [options]="bathOptions" [(selectedValue)]="bath.type" (change)="setBathType($event)">
-            </custom-select>
-            <select [(ngModel)]="bath.type">
+            <select [(ngModel)]="bath.type" (change)="setBathType($event)">
                 <option *ngFor="let option of bathOptions" [value]=option>{{option}}</option>
             </select>
         </div>
@@ -18,7 +16,10 @@
     <div class="setting-container">
         <div class="setting-title">System Bath Coupling Operator</div>
         <div class="setting">
-            <custom-select [options]="operatorOptions" [(selectedValue)]="bath.axis"></custom-select>
+            <select [(ngModel)]="bath.axis">
+                <option *ngFor="let option of operatorOptions" [value]=option>{{option}}</option>
+            </select>
+            <!-- <custom-select [options]="operatorOptions" [(selectedValue)]="bath.axis"></custom-select> -->
         </div>
     </div>
     <div class="settings-container" *ngIf="bath.type == 'Ohmic'">
