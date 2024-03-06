@@ -70,18 +70,3 @@
         <gate-pulse *ngIf="nav == 'gate-pulse'" [selectedQudit]="selectedQudit"></gate-pulse>
     </div>
 </div>
-
-<div class="loading-screen" *ngIf="simulationInProgress">
-    <fa-icon class="spinner" size="3x" [icon]="faSpinner" [spin]="true"></fa-icon>
-    <div class="loading-text">Simulation In Progress...</div>
-    <div class="cancel-button" (click)="cancel()">
-        <div class="button-text">Cancel</div>
-    </div>
-</div>
-<div class="loading-screen" *ngIf="simulationComplete">
-    <div class="loading-text">Simulation Complete.</div>
-    <div class="loading-text">Gate Fidelity: {{ getFidelity()}}</div>
-    <div class="cancel-button" (click)="cancel()">
-        <div class="button-text">Done</div>
-    </div>
-</div>

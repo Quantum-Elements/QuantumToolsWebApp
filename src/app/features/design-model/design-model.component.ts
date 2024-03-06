@@ -25,23 +25,7 @@ export class DesignModelComponent {
   couplingMode: boolean = false;
   selectedQuditToCouple: Qudit[] = [];
   public nav = 'gate-type'
-
-  faSpinner = faSpinner;
-  simulationInProgress = false;
-  simulationComplete = false;
-  private jobStatusSubscription: Subscription;
   constructor(public configService: ConfigService, public apiService: ApiService) {
-    this.jobStatusSubscription = this.apiService.getJobStatusSubject().subscribe((status) => {
-      if (status.done) {
-        this.simulationInProgress = false;
-        this.simulationComplete = true;
-        console.log('Job is done. Result:', status.result);
-        // Do something with the result, update UI, etc.
-      } else {
-        console.error('Job failed with error:', status.error);
-        // Handle error, update UI, etc.
-      }
-    });
   }
 
   setNav(nav) {
@@ -72,16 +56,5 @@ export class DesignModelComponent {
   couplingSelected(coupling: any) {
     this.selectedCoupling = coupling
     this.selectedQudit = null
-  }
-  simulate() {
-    this.simulationInProgress = true;
-    this.apiService.simulate();
-  }
-  cancel() {
-    this.simulationInProgress = false;
-    this.simulationComplete = false;
-  }
-  getFidelity() {
-    return Math.round(this.apiService.gate_fidelity * 10000) / 100
   }
 }
