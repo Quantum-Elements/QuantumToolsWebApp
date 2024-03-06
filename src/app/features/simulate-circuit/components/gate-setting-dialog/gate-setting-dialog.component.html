@@ -1,0 +1,106 @@
+<div mat-dialog-title class="header">
+    <div class="header-text">
+        {{ 'Gate Configuration - ' + gate.type }}
+    </div>
+    <img class="x-icon" (click)="dialogRef.close()" src="assets/x-icon-blue.svg" />
+</div>
+<div mat-dialog-content class="content">
+    <div class="text">
+        {{ getDescription() }}
+    </div>
+    <img class="equation" *ngIf="gate.type !== 'I'" [src]="getEquation()" />
+    <div class="setting-container" *ngIf="gate.type !== 'CR' && gate.qudit">
+        <div class="setting-name">Acting on:</div>
+        <select [(ngModel)]="gate.qudit">
+            <option *ngFor="let qudit of configService.qudits" [value]="qudit.name">{{ 'q' + (qudit.id + 1) }}</option>
+        </select>
+    </div>
+    <div class="setting-container" *ngIf="gate.type == 'CR' && gate.qudit">
+        <div class="setting-name">Qubit a (Z):</div>
+        <select [(ngModel)]="gate.qudit">
+            <option *ngFor="let qudit of configService.qudits" [value]="qudit.name">{{ 'q' + (qudit.id + 1) }}</option>
+        </select>
+    </div>
+    <div class="setting-container" *ngIf="gate.type == 'CR' && gate.qudit">
+        <div class="setting-name">Qubit b (X):</div>
+        <select [(ngModel)]="gate.qudit_b">
+            <option *ngFor="let qudit of configService.qudits" [value]="qudit.name">{{ 'q' + (qudit.id + 1) }}</option>
+        </select>
+    </div>
+    <div class="setting-container">
+        <div class="setting-name">&theta;:</div>
+        <custom-number-input [step]="0.01" [value]="gate.theta" [min]="-1" [max]="1"
+            (valueChange)="gate.theta = $event; calculateAmplitude('X'); calculateAmplitude('Y')" [unit]="'&#960;'">
+        </custom-number-input>
+    </div>
+    <div class="setting-container">
+        <div class="setting-name">Duration (ns):</div>
+        <custom-number-input [step]="1" [value]="gate.duration"
+            (valueChange)="gate.duration = $event; calculateAmplitude('X'); calculateAmplitude('Y')">
+        </custom-number-input>
+    </div>
+    <div class="setting-container" *ngIf="gate.qudit">
+        <div class="setting-name">Drive frequency (GHz):</div>
+        <custom-number-input [step]="0.01" [(value)]="gate.drive_freq"></custom-number-input>
+    </div>
+    <div class="setting-container col" *ngIf="gate.type == 'Rz'">
+        <div class="setting-name">Driving pulse:</div>
+        <div class="pulse-container">
+            <select disabled>
+                <option>Virtual</option>
+            </select>
+        </div>
+    </div>
+    <div class="setting-container col" *ngIf="gate.type !== 'Rz' && gate.type !== 'I'">
+        <div class="setting-name">X drive:</div>
+        <div class="pulse-container">
+            <!-- <select [value]="gate.x_drive ? gate.x_drive.shape : 'None'" (change)="setPulseShape($event, 'X')">
+                <option *ngFor="let pulse of pulseOptions" [value]="pulse">{{ pulse }}</option>
+            </select> -->
+            <select [(ngModel)]="gate.x_drive.shape" (change)="setPulseShape($event, 'X');calculateAmplitude('X')">
+                <option *ngFor="let pulse of pulseOptions" [value]="pulse">{{ pulse }}</option>
+            </select>
+            <div class="pulse-settings-container" *ngIf="gate.x_drive.shape !== 'None'">
+                <div class="setting-container" *ngIf="gate.x_drive.shape !== 'squared'">
+                    <div class="setting-name">Sigma (ns):</div>
+                    <custom-number-input [step]="1" [value]="gate.x_drive.sigma"
+                        (valueChange)="gate.x_drive.sigma = $event; calculateAmplitude('X')"></custom-number-input>
+                </div>
+                <div class="setting-container" *ngIf="gate.x_drive.shape == 'gaussian-squared'">
+                    <div class="setting-name">Width (ns):</div>
+                    <custom-number-input [step]="1" [value]="gate.x_drive.width"
+                        (valueChange)="gate.x_drive.width = $event; calculateAmplitude('X')"></custom-number-input>
+                </div>
+                <div class="setting-container">
+                    <div class="setting-name">Amplitude (GHz):</div>
+                    <custom-number-input [step]="0.1" [(value)]="gate.x_drive.amplitude"></custom-number-input>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="setting-container col" *ngIf="gate.type !== 'Rz' && gate.type !== 'I'">
+        <div class="setting-name">Y drive:</div>
+        <div class="pulse-container">
+            <select [(ngModel)]="gate.y_drive.shape" (change)="setPulseShape($event, 'Y');calculateAmplitude('Y')">
+                <option *ngFor="let pulse of pulseOptions" [value]="pulse">{{ pulse }}</option>
+            </select>
+            <div class="pulse-settings-container" *ngIf="gate.y_drive.shape !== 'None'">
+                <div class="setting-container" *ngIf="gate.y_drive.shape !== 'squared'">
+                    <div class="setting-name">Sigma (ns):</div>
+                    <custom-number-input [step]="1" [value]="gate.y_drive.sigma"
+                        (valueChange)="gate.y_drive.sigma = $event; calculateAmplitude('Y')"></custom-number-input>
+                </div>
+                <div class="setting-container" *ngIf="gate.y_drive.shape == 'gaussian-squared'">
+                    <div class="setting-name">Width (ns):</div>
+                    <custom-number-input [step]="1" [value]="gate.y_drive.width"
+                        (valueChange)="gate.y_drive.width = $event; calculateAmplitude('Y')"></custom-number-input>
+                </div>
+                <div class="setting-container">
+                    <div class="setting-name">Amplitude (GHz):</div>
+                    <custom-number-input [step]="0.1" [(value)]="gate.y_drive.amplitude"></custom-number-input>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn" (click)="save()">Save</div>
+</div>

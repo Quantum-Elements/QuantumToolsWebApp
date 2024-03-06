@@ -78,9 +78,7 @@ export class LindbladBath extends Bath {
             "coupling": this.axis,
             "bath": {
                 "type": this.type.toLowerCase(),
-                "params": {
-                    "gamma": this.gamma * this.exp
-                }
+                "gamma": this.gamma * this.exp
             }
         }
     }

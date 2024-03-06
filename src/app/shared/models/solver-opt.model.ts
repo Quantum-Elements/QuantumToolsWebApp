@@ -1,7 +1,21 @@
 import { SolverOptType } from "../enums/enum";
+import { LinearExponential, OdeSolver, Tsit5, VCABM } from "./ode-solver.model";
+
+export function SolverOptBuilder(type: SolverOptType) {
+    if (type == SolverOptType.Lindblad) {
+        return new LindbladSolverOpt()
+    } else if (type == SolverOptType.Redfield) {
+        return new RedfieldSolverOpt()
+    } else if (type == SolverOptType.Schrodinger) {
+        return new SchrodingerSolverOpt();
+    } else {
+        return null
+    }
+}
 
 export class SolverOpt {
     public type: SolverOptType
+    public ode_solver: OdeSolver;
     constructor(type) {
         this.type = type;
     }
@@ -11,52 +25,46 @@ export class SolverOpt {
 }
 
 export class RedfieldSolverOpt extends SolverOpt {
+    public ode_solver: OdeSolver = new LinearExponential();
+    public unitary_ode_solver: OdeSolver = new Tsit5();
     public int_atol: number
     public int_rtol: number
-    public unitary_ode_opt: { "alg": string, "rtol": number, "atol": number }
-    public ode_opt: { "alg": string, "nsteps": number }
-    constructor(int_atol, int_rtol, unitary_ode_opt, ode_opt) {
+    constructor() {
         super(SolverOptType.Redfield)
-        this.int_atol = int_atol
-        this.int_rtol = int_rtol
-        this.unitary_ode_opt = unitary_ode_opt
-        this.ode_opt = ode_opt
     }
     toJson() {
         return {
             "type": this.type,
             "int_atol": this.int_atol,
             "int_rtol": this.int_rtol,
-            "unitary_ode_opt": this.unitary_ode_opt,
-            "ode_opt": this.ode_opt
+            "unitary_ode_opt": this.unitary_ode_solver.toJson(),
+            "ode_opt": this.ode_solver.toJson()
         }
     }
 }
 
 export class LindbladSolverOpt extends SolverOpt {
-    public ode_opt: { "alg": string, "rtol": number, "atol": number }
-    constructor(ode_opt) {
+    public ode_solver: OdeSolver = new VCABM();
+    constructor() {
         super(SolverOptType.Lindblad)
-        this.ode_opt = ode_opt
     }
     toJson() {
         return {
             "type": this.type,
-            "ode_opt": this.ode_opt
+            "ode_opt": this.ode_solver.toJson()
         }
     }
 }
 
 export class SchrodingerSolverOpt extends SolverOpt {
-    public ode_opt: { "alg": string, "rtol": number, "atol": number }
-    constructor(ode_opt) {
+    public ode_solver: OdeSolver = new VCABM();
+    constructor() {
         super(SolverOptType.Schrodinger)
-        this.ode_opt = ode_opt
     }
     toJson() {
         return {
             "type": this.type,
-            "ode_opt": this.ode_opt
+            "ode_opt": this.ode_solver.toJson()
         }
     }
 }

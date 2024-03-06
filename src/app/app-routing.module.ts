@@ -1,7 +1,9 @@
+import { SimulateCircuitComponent } from './features/simulate-circuit/simulate-circuit.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
 import { DesignModelComponent } from './features/design-model/design-model.component';
 import { DevicePrescriptionComponent } from './features/device-prescription/device-prescription.component';
+import { CustomReuseStrategy } from './app-routing.strategy';
 
 const routes: Routes = [
   {
@@ -10,8 +12,14 @@ const routes: Routes = [
   },
   {
     path: 'design-model',
-    component: DesignModelComponent
+    component: DesignModelComponent,
+    data: { defaultReuseStrategy: true }
   },
+  {
+    path: 'simulate-circuit',
+    component: SimulateCircuitComponent,
+    data: { defaultReuseStrategy: false }
+  }
   // {
   //     path: 'simulate-model',
   //     component: SimulateModelComponent
@@ -20,6 +28,9 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
+  ]
 })
 export class AppRoutingModule { }

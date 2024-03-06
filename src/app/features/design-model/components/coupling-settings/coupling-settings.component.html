@@ -3,20 +3,32 @@
     <button class="btn" (click)="deleteCoupling()">Delete Coupling</button>
 </div>
 <div class="tab-content">
-    <div class="setting-container">
-        <div class="setting-title">Frequency</div>
-        <custom-number-input [step]="0.01" unit="GHz" [(value)]="selectedCoupling.frequency"></custom-number-input>
+    <div class="settings-container">
+        <div class="container-title">Exchange</div>
+        <div class="setting-container">
+            <div class="setting-title">Exchange Strength (J)</div>
+            <custom-number-input [step]="0.01" unit="MHz" [min]="1" [max]="50" [(value)]="selectedCoupling.j">
+            </custom-number-input>
+        </div>
     </div>
-    <div class="setting-container">
-        <div class="setting-title">{{ 'q' + (selectedCoupling.qudit1.id + 1) + ' - Coupling Operator'}}</div>
-        <div class="setting">
-            <custom-select [options]="axisOptions" [(value)]="selectedCoupling.axis1"></custom-select>
+    <div class="settings-container">
+        <div class="container-title">Parasitic</div>
+        <div class="setting-container">
+            <div class="setting-title">Strength</div>
+            <custom-number-input [step]="1" unit="KHz" [min]="5" [max]="10000" [(value)]="selectedCoupling.frequency">
+            </custom-number-input>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">{{ 'q' + (selectedCoupling.qudit1.id + 1) + ' - Coupling Operator'}}</div>
+            <select [(ngModel)]="selectedCoupling.axis2">
+                <option *ngFor="let option of axisOptions" [value]=option>{{option}}</option>
+            </select>
         </div>
         <div class="setting-container">
             <div class="setting-title">{{ 'q' + (selectedCoupling.qudit2.id + 1) + ' - Coupling Operator'}}</div>
-            <div class="setting">
-                <custom-select [options]="axisOptions" [(value)]="selectedCoupling.axis2"></custom-select>
-            </div>
+            <select [(ngModel)]="selectedCoupling.axis2">
+                <option *ngFor="let option of axisOptions" [value]=option>{{option}}</option>
+            </select>
         </div>
     </div>
 </div>

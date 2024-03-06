@@ -14,7 +14,6 @@ export class QuditSettingsComponent {
   @Output() selectedQuditChange = new EventEmitter();
   constructor(public configService: ConfigService, public dialog: MatDialog) { }
   openBathDialog(bath?) {
-    console.log(bath)
     const dialogRef = this.dialog.open(BathDialogComponent, { width: '500px', data: bath })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

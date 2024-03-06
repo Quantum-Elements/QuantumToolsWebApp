@@ -7,7 +7,7 @@ import { interval, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private serverIP = "http://34.220.175.169:4000/"
+  private serverIP = "http://sandbox-1905428319.us-west-2.elb.amazonaws.com:5000/"
 
   public gate_fidelity: number;
   private jobStatusSubject = new Subject<any>();
@@ -33,6 +33,7 @@ export class ApiService {
     let param = this.getSimulationParam();
     this.http.post<any>(this.url('run_simulation'), param, options).subscribe(response => {
       let job_id = response.body.job_id
+      console.log(job_id)
       this.checkJobResult(job_id)
     })
   }
@@ -49,9 +50,8 @@ export class ApiService {
             console.log(response.message);
           } else {
             subscription.unsubscribe(); // Stop the interval
-            this.gate_fidelity = response.task_results[0].fidelity
-            console.log(this.gate_fidelity)
-            this.jobStatusSubject.next({ done: true, result: this.gate_fidelity })
+            let histogram_data = response
+            this.jobStatusSubject.next({ done: true, result: histogram_data })
           }
         },
         (error) => {
@@ -64,35 +64,11 @@ export class ApiService {
   getSimulationParam() {
     let param = {
       "qudits": this.configService.qudits.map(q => q.id + 1),
-      //"coupling_map": this.configService.couplings.map(c => [c.qudit1.id + 1, c.qudit2.id + 1]),
-      "tf": 200,
       "qudits_config": this.configService.qudits.reduce((result, qudit) => { return { ...result, ...qudit.toJSON() } }, {}),
-      "coupling_config": this.configService.couplings.map(c => c.toJSON()),
-      "pulse_schedule": this.configService.qudits.reduce((result, qudit) => { return { ...result, ...qudit.pulseScheduleToJSON() } }, {}),
+      "coupling_config": this.configService.couplings.reduce((result, coupling) => { return { ...result, ...coupling.toJSON() } }, {}),
+      "circuit": this.configService.getGatesList(),
       "solver_opt": this.configService.solver_opt.toJson(),
-      "tasks": [
-        {
-          "type": "gate_fidelity",
-          "target": {
-            "qudit": 1,
-            "gate": "XGate"
-          },
-          "initial_state": this.configService.qudits.reduce((result, qudit) => { return { ...result, ...qudit.initialStateToJson() } }, [])
-        }
-      ]
     }
-    // param["qudits_config"]["qudit_1"]["drive_freq"] = 0.8011043099426882
-    // param["qudits_config"]["qudit_1"]["x_drive"] = {
-    //   "type": "gaussian",
-    //   "scale": 0.003361971298528725,
-    //   "mu": 100,
-    //   "sigma": 30,
-    //   "v_shift": 8.166326661816133e-5,
-    //   "tspan": [
-    //     0,
-    //     200
-    //   ]
-    // }
     console.log(param)
     return param
   }

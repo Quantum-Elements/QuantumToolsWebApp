@@ -1,4 +1,4 @@
-import { GaussianPulse, GaussianSquaredPulse, SqauaredPulse } from './../../../../shared/models/pulse.model';
+import { GaussianPulse, GaussianSquaredPulse, SquaredPulse } from './../../../../shared/models/pulse.model';
 import { Component, Input } from '@angular/core';
 import { ConfigService } from '../../../../core/config.service';
 import { PulseShape } from '../../../../shared/enums/enum';
@@ -18,11 +18,11 @@ export class GatePulseComponent {
   pulseShapeChanged(e: any) {
     let shape = e.target.value
     if (shape == PulseShape.Gaussian) {
-      this.selectedQudit.pulses[0].x_drive = new GaussianPulse('X', 0.003348974185977413, 30)
+      this.selectedQudit.pulses[0].x_drive = new GaussianPulse('X')
     } else if (shape == PulseShape.Squared) {
-      this.selectedQudit.pulses[0].x_drive = new SqauaredPulse('X', 0.003348974185977413)
+      this.selectedQudit.pulses[0].x_drive = new SquaredPulse('X')
     } else if (shape == PulseShape.GaussinSquared) {
-      this.selectedQudit.pulses[0].x_drive = new GaussianSquaredPulse('X', 0.003348974185977413, 30, 10)
+      this.selectedQudit.pulses[0].x_drive = new GaussianSquaredPulse('X')
     }
   }
 }

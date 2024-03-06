@@ -1,3 +1,4 @@
-<select class="dropdown" [(ngModel)]="selectedValue" (ngModelChange)="onSelect($event)">
+<!-- <select class="dropdown" [value]="selectedValue" (change)="onSelect($event)"> -->
+<select class="dropdown" [(ngModel)]="selectedValue">
     <option *ngFor="let option of options" [value]="option">{{ option }}</option>
 </select>

@@ -1,14 +1,12 @@
-<!-- <div class="dashboard-navs" [class.active]="getCurrentRoute() !== ''">
+<div class="dashboard-navs" [class.active]="getCurrentRoute() !== ''">
   <img src="assets/logo/logo_hor_white_colour.svg" class="logo" />
   <div class="nav" *ngIf="getCurrentRoute() !== ''">
     <div class="nav-item" routerLink="/design-model" routerLinkActive="active" skipLocationChange>Design Model
     </div>
-    <div class="nav-item" routerLink="/simulate-model" routerLinkActive="active" skipLocationChange>Simulate
-      Model</div>
     <div class="nav-item" routerLink="/simulate-circuit" routerLinkActive="active" skipLocationChange>
       Simulate Circuit</div>
   </div>
-</div> -->
+</div>
 <div class="main">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
