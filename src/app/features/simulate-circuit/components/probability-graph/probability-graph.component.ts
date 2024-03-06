@@ -31,9 +31,11 @@ export class ProbabilityGraphComponent {
 
   private createSvg(): void {
     d3.select('figure > svg').remove()
+    d3.selectAll('figure > .tooltip').remove()
     this.svg = d3
       .select('figure')
       .append('svg')
+      .attr("preserveAspectRatio", "xMinYMin meet")
       .attr("style", "max-width: 100%; height: 100%; width: 100%")
       .append("g")
       .attr("transform", "translate(" + this.margin + ", 0)");
@@ -84,6 +86,16 @@ export class ProbabilityGraphComponent {
       .style('fill', '#F5F7FF')
       .style('font-weight', 'bold');
 
+    // Tooltip label to show percentage
+    let tooltip = d3.select("figure").append("div")
+      .attr("class", "tooltip")
+      .style("visibility", "hidden")
+      .style("padding", "0.7rem")
+      .style("background-color", 'var(--fillColorPrimary)')
+      .style("z-index", "10")
+      .style("position", "absolute")
+      .style("border-radius", "0.5rem");
+
     // Create and fill the bars
     this.svg.selectAll("bars")
       .data(this.data)
@@ -93,7 +105,10 @@ export class ProbabilityGraphComponent {
       .attr("y", (d: any) => y(d.probability * 100))
       .attr("width", x.bandwidth())
       .attr("height", (d: any) => y(0) - y(d.probability * 100))
-      .attr("fill", "#F5F7FF");
+      .attr("fill", "#F5F7FF")
+      .on("mouseover", (event, d) => { tooltip.text((d.probability * 100).toFixed(2) + '%'); return tooltip.style("visibility", "visible") })
+      .on("mousemove", (event) => { return tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px"); })
+      .on("mouseout", () => { return tooltip.style("visibility", "hidden"); });;
 
   }
 }
