@@ -17,6 +17,19 @@ export class Coupling {
         this.frequency = 10;
         this.j = 3.8
     }
+    exchangeToJSON() {
+        return {
+            "qudits": [this.qudit1.id + 1, this.qudit2.id + 1],
+            "J": this.j * 1e-3
+        }
+    }
+    parasiticToJson() {
+        return {
+            "qudits": [this.qudit1.id + 1, this.qudit2.id + 1],
+            "strength": this.frequency * 1e-6,
+            "operator": [this.axis1, this.axis2]
+        }
+    }
     toJSON() {
         return {
             "exchange": [

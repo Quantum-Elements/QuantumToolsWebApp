@@ -65,7 +65,10 @@ export class ApiService {
     let param = {
       "qudits": this.configService.qudits.map(q => q.id + 1),
       "qudits_config": this.configService.qudits.reduce((result, qudit) => { return { ...result, ...qudit.toJSON() } }, {}),
-      "coupling_config": this.configService.couplings.reduce((result, coupling) => { return { ...result, ...coupling.toJSON() } }, {}),
+      "coupling_config": {
+        "exchange": this.configService.couplings.map(c => c.exchangeToJSON()),
+        "parasitic": this.configService.couplings.map(c => c.parasiticToJson())
+      },
       "circuit": this.configService.getGatesList(),
       "solver_opt": this.configService.solver_opt.toJson(),
     }
