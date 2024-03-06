@@ -11,12 +11,12 @@ export class CustomSelectComponent {
   @Output() selectedValueChange = new EventEmitter<any>();
   ngOnInit() {
     console.log(this.options, this.selectedValue)
-    if (!this.selectedValue && this.options && this.options.length > 0) {
-      setTimeout(() => {
-        this.selectedValue = this.options[0];
-        this.selectedValueChange.emit(this.selectedValue);
-      });
-    }
+    // if (!this.selectedValue && this.options && this.options.length > 0) {
+    //   setTimeout(() => {
+    //     this.selectedValue = this.options[0];
+    //     this.selectedValueChange.emit(this.selectedValue);
+    //   });
+    // }
   }
   ngOnChanges(changes: any): void {
     console.log(changes)
@@ -24,8 +24,8 @@ export class CustomSelectComponent {
       this.selectedValue = changes.selectedValue.currentValue;
     }
   }
-  onSelect(option: any): void {
-    this.selectedValue = option;
-    this.selectedValueChange.emit(option);
+  onSelect(e: any): void {
+    this.selectedValue = e.target.value;
+    this.selectedValueChange.emit(this.selectedValue);
   }
 }

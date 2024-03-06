@@ -1,23 +1,33 @@
 import { PulseShape } from './../enums/enum';
 export class Pulse {
     public axis;
+    public amplitude: number;
     public shape: PulseShape;
     constructor(shape, axis) {
         this.shape = shape
         this.axis = axis
+    }
+    clone() {
+        return Object.assign(Object.create(Object.getPrototypeOf(this)), this);
     }
     toJson() {
         return {}
     }
 }
 
+export class NoPulse extends Pulse {
+    constructor(axis) {
+        super(PulseShape.None, axis)
+    }
+}
+
 export class GaussianPulse extends Pulse {
     public amplitude: number;
     public sigma: number;
-    constructor(axis, amplitude, sigma) {
+    constructor(axis) {
         super(PulseShape.Gaussian, axis)
-        this.amplitude = amplitude
-        this.sigma = sigma
+        this.amplitude = 0.3
+        this.sigma = 4
     }
 
     toJson() {
@@ -32,11 +42,11 @@ export class GaussianPulse extends Pulse {
     }
 }
 
-export class SqauaredPulse extends Pulse {
+export class SquaredPulse extends Pulse {
     public amplitude: number;
-    constructor(axis, amplitude) {
+    constructor(axis) {
         super(PulseShape.Squared, axis)
-        this.amplitude = amplitude
+        this.amplitude = 0.3
     }
 
     toJson() {
@@ -54,11 +64,11 @@ export class GaussianSquaredPulse extends Pulse {
     public amplitude: number;
     public sigma: number;
     public width: number
-    constructor(axis, amplitude, sigma, width) {
+    constructor(axis) {
         super(PulseShape.GaussinSquared, axis)
-        this.amplitude = amplitude
-        this.sigma = sigma
-        this.width = width
+        this.amplitude = 0.0193
+        this.sigma = 4
+        this.width = 16
     }
 
     toJson() {
@@ -70,40 +80,5 @@ export class GaussianSquaredPulse extends Pulse {
                 "sigma": this.sigma
             }
         }
-    }
-}
-
-export class PulseSchedule {
-    public drive_freq: number;
-    public start: number;
-    public duration: number;
-    public x_drive: Pulse | undefined;
-    public y_drive: Pulse | undefined;
-    public pulse: Pulse[];
-
-    constructor(drive_freq, start, duration, x_drive?, y_drive?) {
-        this.drive_freq = drive_freq
-        this.start = start
-        this.duration = duration
-        this.x_drive = x_drive
-        this.y_drive = y_drive
-    }
-
-    toJson() {
-        const json: any = {
-            "drive_freq": this.drive_freq,
-            "start": this.start,
-            "duration": this.duration
-        };
-
-        if (this.x_drive) {
-            Object.assign(json, this.x_drive.toJson());
-        }
-
-        if (this.y_drive) {
-            Object.assign(json, this.y_drive.toJson());
-        }
-
-        return json;
     }
 }

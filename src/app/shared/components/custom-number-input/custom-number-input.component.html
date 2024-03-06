@@ -1,3 +1,4 @@
-<input type="number" [step]="step" [value]="value" (change)="onValueChange($event.target.value)" />
+<input type="number" [min]="min" [max]="max" [step]="step" [value]="value"
+    (change)="onValueChange($event.target.value)" />
 <span class="unit" *ngIf="exp">x 10<sup>{{exp}}</sup></span>
 <span class="unit" *ngIf="unit">{{unit}}</span>

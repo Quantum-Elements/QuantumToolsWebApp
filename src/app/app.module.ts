@@ -1,3 +1,4 @@
+import { SimulateCircuitModule } from './features/simulate-circuit/simulate-circuit.module';
 import { CoreModule } from './core/core.module';
 import { DesignModelModule } from './features/design-model/design-model.module';
 import { DevicePrescriptionModule } from './features/device-prescription/device-prescription.module';
@@ -7,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SharedModule } from './shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -22,12 +24,13 @@ import { HttpClientModule } from '@angular/common/http';
     SharedModule,
     DevicePrescriptionModule,
     DesignModelModule,
+    SimulateCircuitModule,
     CoreModule,
     FontAwesomeModule,
     HttpClientModule
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimations()
   ],
   bootstrap: [AppComponent],
   schemas: [

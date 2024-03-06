@@ -34,14 +34,6 @@ import { PulseDialogComponent } from './components/pulse-dialog/pulse-dialog.com
     SharedModule,
     CoreModule,
     FontAwesomeModule
-    // QuditSettingsComponent,
-    // CouplingSettingsComponent,
-    // BathDialogComponent
-  ],
-  exports: [
-    // QuditSettingsComponent,
-    // CouplingSettingsComponent,
-    // BathDialogComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

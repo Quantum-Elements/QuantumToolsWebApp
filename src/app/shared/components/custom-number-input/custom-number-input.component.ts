@@ -10,9 +10,12 @@ export class CustomNumberInputComponent {
   @Input() exp: number | undefined = undefined;
   @Input() unit: string | undefined = undefined;
   @Input() value: number | null = null;
+  @Input() min: number;
+  @Input() max: number;
   @Output() valueChange = new EventEmitter<number>();
 
   onValueChange(newValue): void {
+    newValue = newValue < this.min ? this.min : newValue > this.max ? this.max : newValue
     this.value = parseFloat(newValue);
     this.valueChange.emit(this.value);
   }

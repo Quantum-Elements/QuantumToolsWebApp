@@ -8,6 +8,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CanvasViewComponent } from './components/canvas-view/canvas-view.component';
 import { QuditComponent } from './components/qudit/qudit.component';
 import { CouplingComponent } from './components/coupling/coupling.component';
+import { CustomCardComponent } from './components/custom-card/custom-card.component';
 
 
 
@@ -18,7 +19,8 @@ import { CouplingComponent } from './components/coupling/coupling.component';
     CustomSelectComponent,
     CustomButtonComponent,
     QuditComponent,
-    CouplingComponent
+    CouplingComponent,
+    CustomCardComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { CouplingComponent } from './components/coupling/coupling.component';
     CanvasViewComponent,
     CustomNumberInputComponent,
     CustomSelectComponent,
-    CustomButtonComponent
+    CustomButtonComponent,
+    CustomCardComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
