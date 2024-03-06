@@ -187,6 +187,7 @@ export class SimulateCircuitComponent {
       }
       clonedGate.qudit = qudit.name;
       clonedGate.drive_freq = qudit.frequency;
+      clonedGate.updateAmplitude()
       // Assign qudit to gate configuration
       event.container.data[event.currentIndex] = clonedGate;
     }

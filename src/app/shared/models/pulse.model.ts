@@ -1,3 +1,4 @@
+import { erf } from 'mathjs';
 import { PulseShape } from './../enums/enum';
 export class Pulse {
     public axis;
@@ -12,6 +13,12 @@ export class Pulse {
     }
     toJson() {
         return {}
+    }
+    aera(d, s) {
+        return (-d + Math.exp(d ** 2 / (8 * s ** 2)) * Math.sqrt(2 * Math.PI) * s * erf(d / (2 * s * Math.sqrt(2)))) / (-1 + Math.exp(d ** 2 / (8 * s ** 2)))
+    }
+    calculateAmplitude(theta, duration) {
+        return;
     }
 }
 
@@ -40,6 +47,10 @@ export class GaussianPulse extends Pulse {
             }
         }
     }
+    calculateAmplitude(theta: number, duration: number) {
+        let amplitudeNoRounded = theta * Math.PI / (2 * Math.PI * this.aera(duration, this.sigma))
+        this.amplitude = Math.round(amplitudeNoRounded * 1e4) / 1e4
+    }
 }
 
 export class SquaredPulse extends Pulse {
@@ -57,6 +68,10 @@ export class SquaredPulse extends Pulse {
                 "amp": this.amplitude
             }
         }
+    }
+    calculateAmplitude(theta: number, duration: number) {
+        let amplitudeNoRounded = theta * Math.PI / (2 * Math.PI * duration)
+        this.amplitude = Math.round(amplitudeNoRounded * 1e4) / 1e4
     }
 }
 
@@ -80,5 +95,9 @@ export class GaussianSquaredPulse extends Pulse {
                 "sigma": this.sigma
             }
         }
+    }
+    calculateAmplitude(theta: number, duration: number) {
+        let amplitudeNoRounded = theta * Math.PI / (2 * Math.PI * this.aera(duration - this.width, this.sigma))
+        this.amplitude = Math.round(amplitudeNoRounded * 1e4) / 1e4
     }
 }

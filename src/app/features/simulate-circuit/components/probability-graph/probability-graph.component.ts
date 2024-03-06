@@ -60,7 +60,7 @@ export class ProbabilityGraphComponent {
       .attr("text-anchor", "middle")
       .style('font-size', 11)
       .text("Computational basis states")
-      .style('fill', '#697882')
+      .style('fill', '#F5F7FF')
       .style('font-weight', 'bold');
 
     // Create the Y-axis band scale
@@ -81,7 +81,7 @@ export class ProbabilityGraphComponent {
       .style("text-anchor", "middle")
       .style('font-size', 11)
       .text("Probability (%)")
-      .style('fill', '#697882')
+      .style('fill', '#F5F7FF')
       .style('font-weight', 'bold');
 
     // Create and fill the bars
@@ -93,6 +93,7 @@ export class ProbabilityGraphComponent {
       .attr("y", (d: any) => y(d.probability * 100))
       .attr("width", x.bandwidth())
       .attr("height", (d: any) => y(0) - y(d.probability * 100))
-      .attr("fill", "#001f5e");
+      .attr("fill", "#F5F7FF");
+
   }
 }

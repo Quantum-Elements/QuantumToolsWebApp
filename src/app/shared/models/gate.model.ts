@@ -1,5 +1,5 @@
-import { RotationalAxis } from './../enums/enum';
-import { Pulse, GaussianPulse, NoPulse, GaussianSquaredPulse } from './pulse.model';
+import { PulseShape, RotationalAxis } from './../enums/enum';
+import { Pulse, GaussianPulse, NoPulse, GaussianSquaredPulse, SquaredPulse } from './pulse.model';
 import { GateType } from "../enums/enum";
 
 export class Gate {
@@ -35,6 +35,23 @@ export class Gate {
                 ...this.y_drive.toJson()
             }
         }
+    }
+    public updateAmplitude() {
+        this.x_drive.calculateAmplitude(this.theta, this.duration)
+        this.y_drive.calculateAmplitude(this.theta, this.duration)
+    }
+    public setPulse(axis, shape) {
+        let drive = axis == RotationalAxis.X ? this.x_drive : this.y_drive
+        if (shape == 'None') {
+            drive = new NoPulse(axis)
+        } else if (shape == PulseShape.Gaussian) {
+            drive = new GaussianPulse(axis)
+        } else if (shape == PulseShape.GaussinSquared) {
+            drive = new GaussianSquaredPulse(axis)
+        } else if (shape == PulseShape.Squared) {
+            drive = new SquaredPulse(axis)
+        }
+        drive.calculateAmplitude(this.theta, this.duration)
     }
 }
 

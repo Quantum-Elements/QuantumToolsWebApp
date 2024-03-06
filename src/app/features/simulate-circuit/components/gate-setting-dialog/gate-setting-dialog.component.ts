@@ -15,8 +15,7 @@ export class GateSettingDialogComponent {
   public prevGate: Gate;
   public pulseOptions = Object.values(PulseShape)
   ngOnInit() {
-    this.calculateAmplitude('X')
-    this.calculateAmplitude('Y')
+    this.gate.updateAmplitude()
     this.prevGate = this.gate.clone();
   }
   calculateAmplitude(axis) {
@@ -58,21 +57,7 @@ export class GateSettingDialogComponent {
   }
   setPulseShape(event: any, axis) {
     let shape = event.target.value
-    let drive;
-    if (shape == 'None') {
-      drive = new NoPulse(axis)
-    } else if (shape == PulseShape.Gaussian) {
-      drive = new GaussianPulse(axis)
-    } else if (shape == PulseShape.GaussinSquared) {
-      drive = new GaussianSquaredPulse(axis)
-    } else if (shape == PulseShape.Squared) {
-      drive = new SquaredPulse(axis)
-    }
-    if (axis == 'X') {
-      this.gate.x_drive = drive
-    } else {
-      this.gate.y_drive = drive
-    }
+    this.gate.setPulse(axis, shape)
   }
   save() {
     this.dialogRef.close({ prevGate: this.prevGate, newGate: this.gate })
