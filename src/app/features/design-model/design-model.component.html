@@ -1,0 +1,73 @@
+<div class="main">
+    <div class="left" *ngIf="step == WorkflowStep.DesignModel">
+        <div class="menu-container">
+            <div class="menu">
+                <div class="menu-header">
+                    Build Schematic
+                </div>
+                <div class="menu-item">Predefine Schematic</div>
+                <div class="menu-item" (click)="configService.addQudit()">Insert Qudit</div>
+                <div class="menu-item" (click)="toggleCouplingMode()">Insert Coupling</div>
+            </div>
+            <!-- <div class="menu">
+            <div class="menu-header">
+                Specify System
+            </div>
+            <div class="menu-item">Qudit Frequencies</div>
+            <div class="menu-item">Coupling Constants</div>
+        </div>
+        <div class="menu">
+            <div class="menu-header">
+                Specify Readout & Initialization
+            </div>
+            <div class="menu-item">Initialization Parameters</div>
+        </div> -->
+        </div>
+    </div>
+    <div class="left" *ngIf="step == WorkflowStep.GateConfig">
+        <div class="menu-container">
+            <div class="menu">
+                <div class="menu-header">
+                    Gate Definition
+                </div>
+                <div class="menu-item" (click)="setNav('gate-type')">Gate Types</div>
+                <div class="menu-item" (click)="setNav('gate-pulse')">Gate Pulse</div>
+            </div>
+            <div class="menu">
+                <div class="menu-header">
+                    Performance Metrics
+                </div>
+                <div class="menu-item">Metric Type</div>
+            </div>
+            <div class="menu">
+                <div class="menu-item" (click)="simulate()">Simulate</div>
+            </div>
+        </div>
+    </div>
+    <canvas-view (quditSelected)="quditSelected($event)" (couplingSelected)="couplingSelected($event)"
+        [selectedQudit]="selectedQudit" [selectedQuditToCouple]="selectedQuditToCouple" [couplingMode]="couplingMode">
+    </canvas-view>
+    <div class="right" *ngIf="step == WorkflowStep.DesignModel && (selectedQudit || selectedCoupling)">
+        <qudit-settings *ngIf="selectedQudit" [(selectedQudit)]="selectedQudit"></qudit-settings>
+        <coupling-settings *ngIf="selectedCoupling" [(selectedCoupling)]="selectedCoupling"></coupling-settings>
+    </div>
+    <div class="right" *ngIf="step == WorkflowStep.GateConfig && selectedQudit">
+        <gate-type *ngIf="nav == 'gate-type'" [selectedQudit]="selectedQudit"></gate-type>
+        <gate-pulse *ngIf="nav == 'gate-pulse'" [selectedQudit]="selectedQudit"></gate-pulse>
+    </div>
+</div>
+
+<div class="loading-screen" *ngIf="simulationInProgress">
+    <fa-icon class="spinner" size="3x" [icon]="faSpinner" [spin]="true"></fa-icon>
+    <div class="loading-text">Simulation In Progress...</div>
+    <div class="cancel-button" (click)="cancel()">
+        <div class="button-text">Cancel</div>
+    </div>
+</div>
+<div class="loading-screen" *ngIf="simulationComplete">
+    <div class="loading-text">Simulation Complete.</div>
+    <div class="loading-text">Gate Fidelity: {{ getFidelity()}}</div>
+    <div class="cancel-button" (click)="cancel()">
+        <div class="button-text">Done</div>
+    </div>
+</div>

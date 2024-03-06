@@ -1,0 +1,27 @@
+<div class="tab-header">
+    Gate Types
+</div>
+<div class="tab-content">
+    <div class="settings-container">
+        <div class="index">{{ 'q' + (selectedQudit.id + 1)}}</div>
+        <div class="setting-container">
+            <div class="setting-title">Initial State</div>
+            <div class="initialization-setting" *ngFor="let level of selectedQudit.initial_state; let i = index">
+                <span>(</span>
+                <input type="number" [(ngModel)]="selectedQudit.initial_state[i].real">
+                <span class="operator">+</span>
+                <input type="number" [(ngModel)]="selectedQudit.initial_state[i].imaginary">
+                <span>i )</span>
+                <span class="level">| {{i}} ></span>
+            </div>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">Gate Type</div>
+            <div class="gate-container">
+                <div class="line"></div>
+                <div class="gate">{{selectedQudit.id == 0 ? 'X' : 'I'}}</div>
+                <div class="line line-2"></div>
+            </div>
+        </div>
+    </div>
+</div>

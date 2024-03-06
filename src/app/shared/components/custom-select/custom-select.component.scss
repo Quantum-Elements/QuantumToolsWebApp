@@ -1,0 +1,14 @@
+:host { 
+    width: 100%;   
+    select {
+        width: 100%;
+        background-color: #001f5e;
+        color: white;
+        border: none;
+        border-radius: 0.8rem;
+        padding: 1rem;
+        display: block;
+        -webkit-appearance: none;
+        box-sizing: border-box;
+    }
+}

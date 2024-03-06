@@ -1,0 +1,7 @@
+<img class="gate-icon" [src]="'assets/gates/'+ gate.type + '-gate.svg'" />
+<span class="a" *ngIf="showSub()">a</span>
+<span class="b" *ngIf="showSub()">b</span>
+<div class="tools">
+    <img src="assets/tools/setting-icon.svg" (click)="settingClicked.emit()" />
+    <img *ngIf="isRemovable" src="assets/tools/trash-icon.svg" (click)="removeClicked.emit()" />
+</div>

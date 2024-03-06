@@ -1,0 +1,58 @@
+<div class="main">
+    <div class="card">
+        <div class="card-header">Device Prescription</div>
+        <div class="card-content">
+            <div class="content-row">
+                <div class="content-row-title">Quantum Device</div>
+                <div class="content-row-value">
+                    <div class="selector">
+                        <div class="option" [class.active]="true">Quantum Computing</div>
+                        <div class="option">Quantum Sensing</div>
+                        <div class="option">Quantum Communication</div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-row">
+                <div class="content-row-title">Device Architecture</div>
+                <div class="content-row-value">
+                    <select class="dropdown">
+                        <option value="1" selected>Superconducting - transmon qubit</option>
+                        <option value="2">Transmon qubit</option>
+                        <option value="3">Superconducting - Xmon qubit</option>
+                        <option value="4">Superconducting - Phase qubit</option>
+                        <option value="5">Superconducting - fluxonium qubit</option>
+                    </select>
+                </div>
+            </div>
+            <div class="content-row">
+                <div class="content-row-title">Basis Type</div>
+                <div class="content-row-value">
+                    <select class="dropdown">
+                        <option value="1" selected>Harmonic oscillator</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </div>
+            <div class="content-row">
+                <div class="content-row-title">Number of Energy Levels</div>
+                <div class="content-row-value">
+                    <select class="dropdown" [(ngModel)]="configService.energyLevels">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            </div>
+            <div class="content-row">
+                <div class="content-row-title">System Characterization</div>
+                <div class="content-row-value">
+                    <select class="dropdown">
+                        <option value="1" selected>Automatic</option>
+                        <option value="2">Upload Data</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" (click)="continue()">Continue</button>
+        </div>
+    </div>
+</div>

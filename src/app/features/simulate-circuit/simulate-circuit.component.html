@@ -1,0 +1,116 @@
+<div class="circuit-design" cdkDropListGroup>
+    <div class="gates-container">
+        <custom-card>
+            <div header-text>Gate Operations</div>
+            <div card-body class="body" cdkDropList (cdkDropListExited)="exited($event)"
+                (cdkDropListEntered)="entered()" [id]="'gates'" [cdkDropListData]="availableGates"
+                cdkDropListSortingDisabled>
+                <!-- <gate *ngFor="let gate of availableGates" cdkDrag cdkDragBoundary=".circuit-design" [gate]="gate"
+                    (contextmenu)="$event.preventDefault(); openGateSettings(gate); ">
+                </gate> -->
+                @for (gate of availableGates; track gate) {
+                <gate cdkDrag [cdkDragData]="gate" cdkDragBoundary=".circuit-design" [gate]="gate" [isRemovable]="false"
+                    (contextmenu)="$event.preventDefault(); openGateSettings(gate); "
+                    (settingClicked)="openGateSettings(gate)"></gate>
+                }
+                <!-- Custom gates components -->
+            </div>
+        </custom-card>
+    </div>
+    <!-- Circuit canvas -->
+    <div class="circuit-container" [class.active]="doubleGateMode">
+        <div class="circuits">
+            <div class="circuit" *ngFor="let qudit of configService.qudits"
+                [class.disabled]="doubleGateMode && !doubleGateMode.available_qudits.includes(qudit)"
+                (click)="quditSelectedForDoubleGate(qudit)">
+                <div class="qudit-name">{{'q' + (qudit.id + 1)}}</div>
+                <div class="line-container">
+                    <div class="line"></div>
+                    <div class="gates-list" [id]="qudit.name" [cdkDropListData]="qudit.gates" cdkDropList
+                        cdkDropListOrientation="horizontal" (cdkDropListDropped)="onDrop($event)">
+                        <!-- <gate *ngFor="let gate of qudit.gates" cdkDrag cdkDragBoundary=".circuit-design" [gate]="gate"
+                            (contextmenu)="$event.preventDefault(); openGateSettings(gate); ">
+                        </gate> -->
+                        @for (gate of qudit.gates; track gate; let i = $index) {
+                        <gate cdkDrag cdkDragBoundary=".circuit-design" [gate]="gate" [id]="assignGateID(qudit, gate)"
+                            (contextmenu)="$event.preventDefault(); openGateSettings(gate, i); "
+                            (settingClicked)="openGateSettings(gate, i)" (removeClicked)="removeGate(qudit, gate)">
+                        </gate>
+                        }
+                    </div>
+                </div>
+                <div class="measure-icon">
+                    <img src="assets/measure-icon.svg" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="simulation">
+    <custom-card class="probabilities">
+        <div header-text>Probabilities</div>
+        <div card-body class="body">
+            <!-- probability bar graph -->
+            <probability-graph [data]="histogramData"></probability-graph>
+        </div>
+    </custom-card>
+    <custom-card class="simulation-card">
+        <div header-text>Simulation</div>
+        <div card-body>
+            <div class="solver-options-container">
+                <div class="setting-name">Solver Options:</div>
+                <div class="settings-container">
+                    <select [value]="configService.solver_opt.type" (change)="setSolverOption($event)">
+                        <option *ngFor="let solver of solverOptions" [value]="solver">{{ solver }}</option>
+                    </select>
+                    <div class="solver-settings-container">
+                        <div class="setting-container">
+                            <div class="setting-name">ODE Solver</div>
+                            <select [value]="configService.solver_opt.ode_solver.type" (change)="setOdeSolver($event)">
+                                <option *ngFor="let solver of odeSolverOptions" [value]="solver">{{ solver }}</option>
+                            </select>
+                        </div>
+                        <div class="setting-container"
+                            *ngIf="configService.solver_opt.ode_solver.type !== 'LinearExponential'">
+                            <div class="setting-name">Absolute error tolerance</div>
+                            <custom-number-input [step]="1" [(value)]="configService.solver_opt.ode_solver.atol">
+                            </custom-number-input>
+                        </div>
+                        <div class="setting-container"
+                            *ngIf="configService.solver_opt.ode_solver.type !== 'LinearExponential'">
+                            <div class="setting-name">Relative error tolerance</div>
+                            <custom-number-input [step]="1" [(value)]="configService.solver_opt.ode_solver.rtol">
+                            </custom-number-input>
+                        </div>
+                        <div class="setting-container"
+                            *ngIf="configService.solver_opt.ode_solver.type == 'LinearExponential'">
+                            <div class="setting-name">Step size (ns)</div>
+                            <custom-number-input [step]="1" [(value)]="configService.solver_opt.ode_solver.nsteps">
+                            </custom-number-input>
+                        </div>
+                    </div>
+                    <div class="button" *ngIf="configService.solver_opt.type == 'redfield'">
+                        <div class="button-text">Advanced Settings</div>
+                    </div>
+                </div>
+            </div>
+            <div class="button" (click)="simulate()">
+                <div class="button-text">Run Simulation</div>
+            </div>
+        </div>
+    </custom-card>
+</div>
+<div class="loading-screen" *ngIf="simulationInProgress">
+    <fa-icon class="spinner" size="3x" [icon]="faSpinner" [spin]="true"></fa-icon>
+    <div class="loading-text">Simulation In Progress...</div>
+    <div class="cancel-button" (click)="cancel()">
+        <div class="button-text">Cancel</div>
+    </div>
+</div>
+<div class="loading-screen" *ngIf="simulationComplete">
+    <div class="loading-text">Simulation Complete.</div>
+    <div class="cancel-button" (click)="cancel()">
+        <div class="button-text">Done</div>
+    </div>
+</div>
+<div class="overlay" *ngIf="doubleGateMode"></div>

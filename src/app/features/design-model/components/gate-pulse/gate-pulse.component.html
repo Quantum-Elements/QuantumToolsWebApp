@@ -1,0 +1,72 @@
+<div class="tab-header">
+    Gate Pulse
+</div>
+<div class="tab-content">
+    <div class="settings-container">
+        <div class="setting-container">
+            <div class="setting-title">Drive Frequency</div>
+            <div class="setting">
+                <custom-number-input [step]="0.01" unit="GHz" [(value)]="selectedQudit.pulses[0].drive_freq">
+                </custom-number-input>
+            </div>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">Start</div>
+            <div class="setting">
+                <custom-number-input [step]="0.01" [(value)]="selectedQudit.pulses[0].start"></custom-number-input>
+            </div>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">Duration</div>
+            <div class="setting">
+                <custom-number-input [step]="0.01" [(value)]="selectedQudit.pulses[0].duration"></custom-number-input>
+            </div>
+        </div>
+        <div class="setting-container">
+            <div class="setting-title">x-drive</div>
+            <div class="settings-container sub">
+                <div class="setting-container">
+                    <div class="setting-title">Pulse Shape</div>
+                    <div class="setting">
+                        <select class="dropdown" [(ngModel)]="selectedQudit.pulses[0].x_drive.shape"
+                            (change)="pulseShapeChanged($event)">
+                            <option [value]="'gaussian'">Gaussian</option>
+                            <option [value]="'squared'">Squared</option>
+                            <option [value]="'gaussian-squared'">Gaussian Squared</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="setting-container">
+                    <div class="setting-title">Amplitude</div>
+                    <div class="setting">
+                        <custom-number-input [step]="0.01" [(value)]="selectedQudit.pulses[0].x_drive.amplitude">
+                        </custom-number-input>
+                    </div>
+                </div>
+                <div class="setting-container" *ngIf="selectedQudit.pulses[0].x_drive.shape !== 'squared'">
+                    <div class="setting-title">Σ</div>
+                    <div class="setting">
+                        <custom-number-input [step]="0.01" [(value)]="selectedQudit.pulses[0].x_drive.sigma">
+                        </custom-number-input>
+                    </div>
+                </div>
+                <div class="setting-container" *ngIf="selectedQudit.pulses[0].x_drive.shape === 'gaussian-squared'">
+                    <div class="setting-title">width</div>
+                    <div class="setting">
+                        <custom-number-input [step]="0.01" [(value)]="selectedQudit.pulses[0].x_drive.width">
+                        </custom-number-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="setting-container">
+            <div class="setting-title">y-drive</div>
+            <div class="setting">
+                <select class="dropdown">
+                    <option value="gaussian">Gaussian</option>
+                    <option value="Squared">Squared</option>
+                </select>
+            </div>
+        </div> -->
+</div>

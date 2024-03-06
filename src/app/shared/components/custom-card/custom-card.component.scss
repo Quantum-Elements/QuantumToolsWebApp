@@ -1,0 +1,25 @@
+:host {
+    width: 100%;
+    height: 100%;
+    background-color: var(--fillColorSecondary);
+    border-radius: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    .header {
+        display: flex;
+        align-items: center;
+        .header-text {
+            font-weight: bold;
+        }
+    }
+    .divider {
+        min-height: 1px;
+        background-color: #858585;
+        margin: 0.5rem 0;
+    }
+    .body {
+        flex: 1;        
+    }
+}

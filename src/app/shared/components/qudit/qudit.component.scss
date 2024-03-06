@@ -1,0 +1,19 @@
+:host {
+    &.active {
+        border-color: white;
+    }
+    &:hover {
+        border-color: white;
+    }
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    border: 3px solid var(--fillColorPrimary);
+    background-color: var(--fillColorPrimary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+}

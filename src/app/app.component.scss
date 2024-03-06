@@ -1,0 +1,49 @@
+@import "../styles.scss";
+
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .dashboard-navs {
+    &.active {
+      justify-content: flex-start;
+      column-gap: 2rem;
+    }
+    display: flex;
+    justify-content: center;
+    padding: 1rem 2rem;
+    background-color: var(--fillColorSecondary);
+    box-shadow: 0 2rem 2rem rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+    .logo {
+      width: 15%;
+    }
+    .nav {
+      display: flex;
+      column-gap: 0.1rem;
+      background-color: var(--fillColorPrimary);
+      border-radius: 0.8rem;
+      padding: 0.25rem;
+      .nav-item {
+        &:hover {
+          background-color: var(--fillColorSecondary);
+        }
+        &.active {
+          background-color: var(--fillColorSecondary);
+        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2rem;
+        //border: 1px solid #fff;
+        border-radius: 0.8rem;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+    }
+  }
+  .main {
+    flex: 1;
+  }
+}
