@@ -32,7 +32,8 @@
                             (contextmenu)="$event.preventDefault(); openGateSettings(gate); ">
                         </gate> -->
                         @for (gate of qudit.gates; track gate; let i = $index) {
-                        <gate cdkDrag cdkDragBoundary=".circuit-design" [gate]="gate" [id]="assignGateID(qudit, gate)"
+                        <gate cdkDrag cdkDragBoundary=".circuit-design" [class.disabled]="gate.isPlaceHolder"
+                            [gate]="gate" [id]="assignGateID(qudit, gate)"
                             (contextmenu)="$event.preventDefault(); openGateSettings(gate, i); "
                             (settingClicked)="openGateSettings(gate, i)" (removeClicked)="removeGate(qudit, gate)">
                         </gate>

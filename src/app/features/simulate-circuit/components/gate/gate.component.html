@@ -1,4 +1,4 @@
-<img class="gate-icon" [src]="'assets/gates/'+ gate.type + '-gate.svg'" />
+<img class="gate-icon" *ngIf="!gate.isPlaceHolder" [src]="'assets/gates/'+ gate.type + '-gate.svg'" />
 <span class="a" *ngIf="showSub()">a</span>
 <span class="b" *ngIf="showSub()">b</span>
 <div class="tools">

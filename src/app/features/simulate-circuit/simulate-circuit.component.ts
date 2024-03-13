@@ -93,7 +93,6 @@ export class SimulateCircuitComponent {
   }
 
   resetDoubleGatePlaceholder(event: CdkDragDrop<any>) {
-    console.log(event)
     const container = event.container
     const nearestDoubleGate = container.data.slice(event.currentIndex + 1).find(gate => !gate.isSingle || gate.type == GateType.DoubleGatePlaceHolder)
     if (!nearestDoubleGate) {
@@ -106,8 +105,8 @@ export class SimulateCircuitComponent {
     const qudit_a = this.configService.findQuditByName(originGate.qudit)
     const qudit_b = this.configService.findQuditByName(originGate.qudit_b)
     for (let i = Math.min(qudit_a.id, qudit_b.id); i <= Math.max(qudit_a.id, qudit_b.id); i++) {
-      for (let j = nearestDoublegateIndex; j--; j >= 0) {
-        if (this.configService.qudits[i].gates[j].isPlaceHolder) {
+      for (let j = nearestDoublegateIndex; j >= 0; j--) {
+        if (this.configService.qudits[i].gates[j] && this.configService.qudits[i].gates[j].isPlaceHolder) {
           this.configService.qudits[i].gates.splice(j, 1)
         }
       }
@@ -121,8 +120,6 @@ export class SimulateCircuitComponent {
     }
   }
   fillDoubleGatePlaceHolder(gate) {
-    // const container = event.container
-    // console.log(container)
     let doubleGate;
     let doubleGateIndex;
     const gateList = this.configService.findQuditByName(gate.qudit).gates
@@ -130,27 +127,94 @@ export class SimulateCircuitComponent {
     if (!gate.isSingle) {
       doubleGate = gate;
       doubleGateIndex = index
+      // remove all the placeholder gate before the double gate until real gate appears on each qudit
+      const originGate = doubleGate.type == GateType.DoubleGatePlaceHolder ? doubleGate.originGate : doubleGate
+      const qudit_a = this.configService.findQuditByName(originGate.qudit)
+      const qudit_b = this.configService.findQuditByName(originGate.qudit_b)
+      for (let i = Math.min(qudit_a.id, qudit_b.id); i <= Math.max(qudit_a.id, qudit_b.id); i++) {
+        while (this.configService.qudits[i].gates.length < doubleGateIndex) {
+          this.configService.qudits[i].gates.push(new PlaceHolder())
+        }
+        if (i !== qudit_a.id
+          && (!this.configService.qudits[i].gates[doubleGateIndex]
+            || (this.configService.qudits[i].gates[doubleGateIndex]
+              && this.configService.qudits[i].gates[doubleGateIndex].type == GateType.DoubleGatePlaceHolder))) {
+          this.configService.qudits[i].gates.push(new DoubleGatePlaceHolder(originGate))
+        }
+      }
     } else {
       doubleGate = gateList.slice(index + 1).find(gate => !gate.isSingle || gate.type == GateType.DoubleGatePlaceHolder)
       doubleGateIndex = gateList.indexOf(doubleGate)
-    }
-    if (!doubleGate) {
-      // No double gate placed after where gate was placed
-      return
-    }
-    // remove all the placeholder gate before the double gate until real gate appears on each qudit
-    const originGate = doubleGate.type == GateType.DoubleGatePlaceHolder ? doubleGate.originGate : doubleGate
-    const qudit_a = this.configService.findQuditByName(originGate.qudit)
-    const qudit_b = this.configService.findQuditByName(originGate.qudit_b)
-    for (let i = Math.min(qudit_a.id, qudit_b.id); i <= Math.max(qudit_a.id, qudit_b.id); i++) {
-      while (this.configService.qudits[i].gates.length < doubleGateIndex) {
-        this.configService.qudits[i].gates.push(new PlaceHolder())
+
+      if (!doubleGate) {
+        // No double gate placed after where gate was placed
+        return
       }
-      if (i !== qudit_a.id && (!this.configService.qudits[i].gates[doubleGateIndex] || (this.configService.qudits[i].gates[doubleGateIndex] && this.configService.qudits[i].gates[doubleGateIndex].type == GateType.DoubleGatePlaceHolder))) {
-        this.configService.qudits[i].gates.push(new DoubleGatePlaceHolder(originGate))
+      if (doubleGate.type == GateType.DoubleGatePlaceHolder) {
+        let { left, right } = this.findPlaceholdersNearAnindex(gateList, index)
+        if (left >= 0 && right >= 0) {
+          gateList.splice(left, 1)
+        } else if (right >= 0) {
+          gateList.splice(right, 1)
+        } else if (left >= 0) {
+          gateList.splice(left, 1)
+        } else {
+          const originGate = doubleGate.type == GateType.DoubleGatePlaceHolder ? doubleGate.originGate : doubleGate
+          const qudit_a = this.configService.findQuditByName(originGate.qudit)
+          const qudit_b = this.configService.findQuditByName(originGate.qudit_b)
+          for (let i = Math.min(qudit_a.id, qudit_b.id); i <= Math.max(qudit_a.id, qudit_b.id); i++) {
+            if (this.configService.findQuditByName(gate.qudit).id !== i) {
+              this.configService.qudits[i].gates.splice(doubleGateIndex - 1, 0, new PlaceHolder())
+            }
+          }
+        }
+      } else {
+        let placeHolderGate = gateList.slice(index + 1, doubleGateIndex + 1).find(g => g.isPlaceHolder && g.type !== GateType.DoubleGatePlaceHolder)
+        if (placeHolderGate) {
+          // let placeholderInGateList = gateList.slice(index + 1, doubleGateIndex + 1).find(g => g.isPlaceHolder)
+          gateList.splice(gateList.slice(index, doubleGateIndex + 1).indexOf(placeHolderGate), 1)
+        } else {
+          const originGate = doubleGate.type == GateType.DoubleGatePlaceHolder ? doubleGate.originGate : doubleGate
+          const qudit_a = this.configService.findQuditByName(originGate.qudit)
+          const qudit_b = this.configService.findQuditByName(originGate.qudit_b)
+          for (let i = Math.min(qudit_a.id, qudit_b.id); i <= Math.max(qudit_a.id, qudit_b.id); i++) {
+            while (this.configService.qudits[i].gates.length <= doubleGateIndex) {
+              this.configService.qudits[i].gates.splice(doubleGateIndex - 1, 0, new PlaceHolder())
+            }
+          }
+        }
       }
     }
-    console.log(this.configService.qudits)
+  }
+
+  findPlaceholdersNearAnindex(gateList, index) {
+    const result = { left: -1, right: -1 }
+    let leftIndex = index - 1;
+    let rightIndex = index + 1;
+    const condition = (gate) => gate.type == GateType.PlaceHolder
+    while (leftIndex >= 0 || rightIndex < gateList.length) {
+      if (leftIndex >= 0) {
+        if ((gateList[leftIndex].type == GateType.DoubleGatePlaceHolder || !gateList[leftIndex].isSingle) && result.left < 0) {
+          result.left = -1
+        }
+        if (condition(gateList[leftIndex]) && result.left < 0) {
+          result.left = leftIndex;
+        }
+      }
+      if (rightIndex < gateList.length) {
+        if ((gateList[rightIndex].type == GateType.DoubleGatePlaceHolder || !gateList[rightIndex].isSingle) && result.right < 0) {
+          result.right = -1
+        }
+        if (condition(gateList[rightIndex]) && result.right < 0) {
+          result.right = rightIndex;
+        }
+      }
+      if (result.left! < 0 && result.right! < 0) break;
+      leftIndex--;
+      rightIndex++;
+    }
+
+    return result;
   }
 
   assignGateID(qudit, gate) {
@@ -192,6 +256,7 @@ export class SimulateCircuitComponent {
       event.container.data[event.currentIndex] = clonedGate;
     }
     if (clonedGate.isSingle) {
+      //this.resetDoubleGatePlaceholder(event)
       this.fillDoubleGatePlaceHolder(clonedGate)
     }
     //this.resetDoubleGatePlaceholder(event)

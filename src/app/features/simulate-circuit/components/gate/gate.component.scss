@@ -1,4 +1,8 @@
 :host {
+    &.disabled {
+        opacity: 0;
+        pointer-events: none;
+    }
     &.double {
         z-index: 2;
         align-self: flex-start;
