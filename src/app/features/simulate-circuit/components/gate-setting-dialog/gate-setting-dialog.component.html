@@ -27,19 +27,19 @@
             <option *ngFor="let qudit of configService.qudits" [value]="qudit.name">{{ 'q' + (qudit.id + 1) }}</option>
         </select>
     </div>
-    <div class="setting-container">
+    <div class="setting-container" *ngIf="gate.type !== 'I'">
         <div class="setting-name">&theta;:</div>
         <custom-number-input [step]="0.01" [value]="gate.theta" [min]="-1" [max]="1"
             (valueChange)="gate.theta = $event; calculateAmplitude('X'); calculateAmplitude('Y')" [unit]="'&#960;'">
         </custom-number-input>
     </div>
-    <div class="setting-container">
+    <div class="setting-container" *ngIf="gate.type !== 'Rz'">
         <div class="setting-name">Duration (ns):</div>
         <custom-number-input [step]="1" [value]="gate.duration"
             (valueChange)="gate.duration = $event; calculateAmplitude('X'); calculateAmplitude('Y')">
         </custom-number-input>
     </div>
-    <div class="setting-container" *ngIf="gate.qudit">
+    <div class="setting-container" *ngIf="gate.qudit && gate.type !== 'I' && gate.type !== 'Rz'">
         <div class="setting-name">Drive frequency (GHz):</div>
         <custom-number-input [step]="0.01" [(value)]="gate.drive_freq"></custom-number-input>
     </div>

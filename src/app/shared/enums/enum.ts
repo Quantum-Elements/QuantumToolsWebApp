@@ -13,8 +13,8 @@ export enum RotationalAxis {
 
 export enum PulseShape {
     Gaussian = 'gaussian',
-    Squared = 'squared',
-    GaussinSquared = 'gaussian-squared',
+    Squared = 'square',
+    GaussinSquared = 'gaussian-square',
     None = "None"
 }
 
