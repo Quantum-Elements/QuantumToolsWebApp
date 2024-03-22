@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ "development", "main" ]
+    branches: [ "development", "master" ]
 
 jobs:
   build_and_push:
